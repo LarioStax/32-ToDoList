@@ -16,7 +16,17 @@ router.post("/", function(req, res) {
     let newToDo = {name: req.body.name};
     database.ToDo.create(newToDo)
     .then(function(createdToDo){
-        res.json(createdToDo);
+        res.status(201).json(createdToDo);
+    })
+    .catch(function(err) {
+        res.send(err);
+    })
+})
+
+router.get("/:todoId", function(req, res) {
+    database.ToDo.findById(req.params.todoId)
+    .then(function(foundToDo) {
+        res.json(foundToDo);
     })
     .catch(function(err) {
         res.send(err);
