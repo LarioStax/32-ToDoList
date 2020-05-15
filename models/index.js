@@ -12,3 +12,5 @@ mongoose.connection.on("connected", function() {
 
 mongoose.Promise = Promise; //use promises instead of callbacks! - looks cleaner
 
+
+module.exports.ToDo = require("./todo.js");
