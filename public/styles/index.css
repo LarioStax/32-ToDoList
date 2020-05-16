@@ -51,7 +51,8 @@ header h2 {
 }
 
 .task {
-    width: 100%;
+    padding: 0 1%;
+    width: 98%;
     height: 50px;
     line-height: 50px;
     font-size: 20px;
@@ -65,17 +66,23 @@ header h2 {
     cursor: pointer;
 }
 
+
 .done {
     text-decoration: line-through;
     color: #959595;
 }
 
 li span {
-    color: #454545;
+    color: #aa2222;
+    float: right;
+    opacity: 0;
     transition: all 0.1s;
 }
 
 li span:hover {
-    color: #353535;
-    font-weight: 700;
+    color: #ff0000;
+}
+
+.task:hover span {
+    opacity: 1;
 }

@@ -10,7 +10,29 @@ $(document).ready(function () {
       createToDo();
     }
   })
+
+  //we connect the listener to something that is there when page loads
+  //and then specify the click only to spans inside that connected object
+  $(".list").on("click", "span", function() {
+    removeToDo($(this).parent())
+  })
 })
+
+function removeToDo(todo) {
+  let toDosId = todo.data("id");
+  let deleteUrl = `/api/todos/${toDosId}`;
+  $.ajax({
+    method: "DELETE",
+    url: deleteUrl
+  })
+  .then(function(confirmationMessage) {
+    console.log(confirmationMessage);
+    todo.remove();
+  })
+  .catch(function(err) {
+    console.log(err);
+  })
+};
 
 function visualiseToDos(todos) {
   //add ToDos to page here
@@ -20,7 +42,8 @@ function visualiseToDos(todos) {
 }
 
 function addToDo(todo) {
-  let newToDo = $(`<li class="task">${todo.name}</li>`)
+  let newToDo = $(`<li class="task">${todo.name}<span>X</span></li>`)
+  newToDo.data("id", todo._id); //this is stored in jquery's memory!
   if (todo.completed) {
     newToDo.addClass("done");
   }
