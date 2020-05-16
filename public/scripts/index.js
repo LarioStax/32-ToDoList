@@ -13,14 +13,36 @@ $(document).ready(function () {
 
   //we connect the listener to something that is there when page loads
   //and then specify the click only to spans inside that connected object
-  $(".list").on("click", "span", function() {
+  $(".list").on("click", "span", function(e) {
+    e.stopPropagation();
     removeToDo($(this).parent())
+  })
+
+  $(".list").on("click", "li", function() {
+    updateToDo($(this));
   })
 })
 
+function updateToDo(todo) {
+  let updateUrl = `/api/todos/${todo.data("id")}`;
+  let isDone = !todo.data("completed");
+  let updateData = {completed: isDone}
+  $.ajax({
+    method: "PUT",
+    url: updateUrl,
+    data: updateData 
+  })
+  .then(function(updatedToDo) {
+    todo.toggleClass("done");
+    todo.data("completed", isDone);
+  })
+  .catch(function(err) {
+    console.log(err);
+  })
+}
+
 function removeToDo(todo) {
-  let toDosId = todo.data("id");
-  let deleteUrl = `/api/todos/${toDosId}`;
+  let deleteUrl = `/api/todos/${todo.data("id")}`;
   $.ajax({
     method: "DELETE",
     url: deleteUrl
@@ -44,6 +66,7 @@ function visualiseToDos(todos) {
 function addToDo(todo) {
   let newToDo = $(`<li class="task">${todo.name}<span>X</span></li>`)
   newToDo.data("id", todo._id); //this is stored in jquery's memory!
+  newToDo.data("completed", todo.completed); //this is stored in jquery's memory!
   if (todo.completed) {
     newToDo.addClass("done");
   }
